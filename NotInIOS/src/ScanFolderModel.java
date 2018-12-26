@@ -1,22 +1,23 @@
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
-//import java.util.Iterator;
 import java.util.Scanner;
 
 public class ScanFolderModel{
 	private ArrayList<File> listOfFilesPC,listOfFilesIOS; //listOfFilesPCMain,,listOfFilesIOSMain;
-	private ArrayList<String> storePC,storeIOS;
+	private ArrayList<String> storePC = new ArrayList<>();
+	private ArrayList<String> storeIOS = new ArrayList<>();
+	
+	
 	private String pathIOS,pathDest;
 	
 	public void getFileNames() throws IOException, NullPointerException{
 
 		Scanner s = new Scanner(System.in); //later it'll be in get path and set path methods;
 
+//		@SuppressWarnings("unused")
 		PathsOfPCIOSFoldersModel pcIO= new PathsOfPCIOSFoldersModel(); //may be i am creating unnecessary objects
 		
 		System.out.println("pc path of destFolder (d:/myfile/)");  
@@ -26,17 +27,20 @@ public class ScanFolderModel{
 		System.out.println("ios path of iosFolder (ios:/appleDCIM/)");
 		pcIO.setPathIOSDest(s.nextLine());
 		pathIOS = pcIO.getPathIOSDest(); //scan folder for IOS storage
-	//	System.out.println();
+//	//	System.out.println();
 		
 		String test1 = "d:/NotInIOS/test/test1/";
 		String test2 = "d:/NotInIOS/test/test2/";
 		
-		creatingFolders(pathDest,test1,listOfFilesPC);
-		creatingFolders(pathIOS,test2,listOfFilesIOS);
+//		pathDest = test1;
+//		pathIOS  = test2;
+		
+		setListOfFiles(pathDest,test1,listOfFilesPC,"pc");
+		setListOfFiles(pathIOS,test2,listOfFilesIOS,"ios");
 		s.close();
 	}
 
-	private void creatingFolders(String path, String test, ArrayList<File> listOfFiles){
+	private void setListOfFiles(String path, String test, ArrayList<File> listOfFiles,String type ){
 		try {
 			
 			File folder = new File(path); //works both ways either f:\\pix\\ or that
@@ -44,7 +48,8 @@ public class ScanFolderModel{
 				folder = new File(test);
 			}
 			if(folder.exists() && folder.isDirectory()) {
-				listOfFiles = new ArrayList<File>(Arrays.asList(folder.listFiles()));
+				if(type=="pc")  listOfFilesPC = new ArrayList<File>(Arrays.asList(folder.listFiles()));
+				else listOfFilesIOS = new ArrayList<File>(Arrays.asList(folder.listFiles()));	
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -52,45 +57,26 @@ public class ScanFolderModel{
 	}
 	
 	public void checkIfExistInPC() {
+		String tempName = null;
 		try {
 				//System.out.println(listOfFilesPC.size()+ " "+ listOfFilesIOS.size());
 			
-			
 			Iterator<File> pc = listOfFilesPC.iterator(); 
 	        while (pc.hasNext()) {
-	        	Path p = Paths.get(pc.toString());
-	        	String file = p.getFileName().toString();
-	        	System.out.println(file);
-	        	this.storePC.add(file);
-	        	//this.abc.add(pc.next().getName().toString());     //the value is not being passed and doesn't run after this even if i remove the toString() method.
-	        	System.out.println("asdf");
+	        	tempName = pc.next().getName();
+	        	//System.out.println("File Name in pc: " +  tempName);
+	        	this.storePC.add(tempName);
 			}
 	        
 	        Iterator<File> ios = listOfFilesIOS.iterator(); 
 	        while (ios.hasNext()) {
-	        	Path p = Paths.get(pc.toString());
-	        	String file = p.getFileName().toString();
-	        	this.storeIOS.add(file);
-	        	//String filename = ios.next().getName(); 
-	        	//this.storeIOS.add(ios.next().getName());
+	        	tempName = ios.next().getName();
+	        	System.out.println("File Name in ios: " +  tempName);
+	        	this.storeIOS.add(tempName);
 	        }
 			
-//	            System.out.println(it.next().getName());                         /***
-		//	this.abc.addAll(listOfFilesPC);
-		//	this.bcd.addAll(listOfFilesIOS);										***
-			
-			
-//			for(int i=0;i<listOfFilesPC.size();i++) { 
-//					this.abc.add(i,listOfFilesPC.get(i).getName().toString());  ****** THis whole comment block should act similar
-//					System.out.println(i);
-//				}
-//				
-//			System.out.println("CheckIf method for loop 1st start");
-//			for(int j=0;j<listOfFilesIOS.size();j++) {
-//				System.out.println("line 84 working");
-//				this.bcd.add(listOfFilesIOS.get(j).getName().toString());          *****/
-//			}
-			
+	        System.out.println("File Name in removing all");
+	        
 			this.storePC.removeAll(this.storeIOS);
 			for(String m: storePC){
 				System.out.println(m);

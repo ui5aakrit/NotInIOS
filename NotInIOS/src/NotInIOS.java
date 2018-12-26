@@ -1,19 +1,26 @@
 import java.io.IOException;
 
-public class NotInIOS{
+public class NotInIOS extends ScanFolderModel{
+	
 	private static boolean moveIOSFiles = false;
 	private static boolean movePCFiles = false;
+	
 	public static void main(String[] args){
-		ScanFolderModel sf = new ScanFolderModel();
+		NotInIOS notInIOS = new NotInIOS();
+		notInIOS.doIOSStuffs();
+	}
+	
+	public void doIOSStuffs() {
+
 		try {
-			sf.getFileNames(); //fetches the filenames of all the files in the respective ios and windows folders.
-			sf.checkIfExistInPC(); //will use when later added to the ScanFOlderModel Class.
+			super.getFileNames(); //fetches the filenames of all the files in the respective ios and windows folders.
+			super.checkIfExistInPC(); //will use when later added to the ScanFOlderModel Class.
 			//sf.printValuesOfList();
 			if (moveIOSFiles==true) {
-				sf.moveFilesIOSToPC();
+				super.moveFilesIOSToPC();
 			}
 			if(movePCFiles ==true) {
-				sf.movePCToNewFolder();
+				super.movePCToNewFolder();
 			}
 			
 		} catch (IOException e) { 
@@ -21,3 +28,4 @@ public class NotInIOS{
 		}
 	}
 }
+
